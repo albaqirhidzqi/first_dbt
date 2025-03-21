@@ -7,7 +7,7 @@ models:
 
       - name: OrderDate
         tests: 
-          - not_null_dat
+          - not_null_date
 
       - name: ProcuredDate
         tests: 
@@ -15,7 +15,13 @@ models:
 
       - name: DeliveryDate
         tests: 
-          - not_null_dat
+          - not_null_date
+
+      - name: DeliveryStatus
+        description: "{{ doc('DeliveryStatus')}}"
+        tests: 
+          - accepted_values:
+              values: ["01","02"]
 
       - name: OrderNumber
         tests:

@@ -7,6 +7,7 @@ SELECT
     STR_TO_DATE(OrderDate, "%d/%m/%y") OrderDate,
     STR_TO_DATE(ShipDate, "%d/%m/%y") ShipDate,
     STR_TO_DATE(DeliveryDate, "%d/%m/%y") DeliveryDate,
+    DeliveryStatus,
     CurrencyCode,
     SL.SalesTeamID,
     SalesTeamName,
