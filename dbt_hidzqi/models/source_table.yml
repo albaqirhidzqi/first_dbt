@@ -1,22 +1,36 @@
-sources: 
+sources:
+  - name: sales_data
+    schema: my_database
+    freshness:
+      warn_after: {count: 1, period: day}
+      error_after: {count: 1, period: day}
+    loaded_at_field: ProcuredDate
+
   - name: ecom
     schema: my_database  # Perbaikan: 'schemna' → 'schema'
     tables:
       - name: cust
+        description: The customer table from my_database schema
         identifier: customer_dim
       - name: fact
+        description: The transaction table from my_database schema
         identifier: fact_table
       - name: time
+        description: The time table from my_database schema
         identifier: time_dim
       - name: item
+        description: The item table from my_database schema
         identifier: item_dim
       - name: store
+        description: The store table from my_database schema
         identifier: store_dim
       - name: trans
+        description: The kind of transaction table from my_database schema
         identifier: trans_dim  # Perbaikan: 'identifierr' → 'identifier'
     
   - name: sale
     schema: my_database  # Perbaikan: 'schemna' → 'schema'
     tables:
       - name: sales
+        description: The sales of us table from my_database schema
         identifier: sales_data
