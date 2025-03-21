@@ -1,0 +1,34 @@
+models:
+  - name: sales_data_stg
+    columns:
+      - name: ShipDate
+        tests: 
+          - not_null_date
+
+      - name: OrderDate
+        tests: 
+          - not_null_dat
+
+      - name: ProcuredDate
+        tests: 
+          - not_null_date
+
+      - name: DeliveryDate
+        tests: 
+          - not_null_dat
+
+      - name: OrderNumber
+        tests:
+          - not_null
+          - unique 
+      
+      - name: WarehouseCode
+        tests:
+          - accepted_values:
+              values: ["WARE-NMK1003","WARE-NBV1002","WARE-PUJ1005","WARE-MKL1006","WARE-UHY1004","WARE-XYS1001"]
+
+              
+
+
+
+

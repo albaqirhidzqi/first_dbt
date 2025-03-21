@@ -1,0 +1,10 @@
+SELECT
+    TIME_KEY,
+    STR_TO_DATE(SUBSTR(DATE,1,10), '%d-%m-%Y')   DATE_KEY,
+    HOUR,
+    DAY,
+    WEEK,
+    MONTH,
+    QUARTER,
+    YEAR
+FROM MY_DATABASE.TIME_DIM

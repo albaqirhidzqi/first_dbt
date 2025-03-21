@@ -1,0 +1,67 @@
+{{ config(materialized='table') }}
+
+WITH MAIN_DATA AS (
+    SELECT
+        FS.CUSTOMER_KEY,
+        TS.DATE_KEY,
+        TS.YEAR,
+        FS.TOTAL_PRICE
+    FROM 
+        {{ ref('fact_table_stg') }} FS
+    LEFT JOIN 
+        {{ ref('time_stg') }} TS
+    ON 
+        FS.TIME_KEY = TS.TIME_KEY
+)
+, RECENCY_TABLE AS (
+    SELECT
+        CUSTOMER_KEY,
+        YEAR,
+        DATEDIFF(DATE_FORMAT(DATE_ADD(MAX(DATE_KEY), INTERVAL 1 YEAR), '%Y-01-01'), MAX(DATE_KEY)) AS RECENCY 
+    FROM 
+        MAIN_DATA
+    GROUP BY 
+        CUSTOMER_KEY,
+        YEAR
+)
+, FREQUENCY_TABLE AS (
+    SELECT
+        CUSTOMER_KEY,
+        YEAR,
+        COUNT(DISTINCT DATE_KEY) AS FREQUENCY
+    FROM 
+        MAIN_DATA
+    GROUP BY 
+        CUSTOMER_KEY,
+        YEAR
+)
+, MONETARY_TABLE AS (
+    SELECT
+        CUSTOMER_KEY,
+        YEAR,
+        SUM(TOTAL_PRICE) AS MONETARY
+    FROM 
+        MAIN_DATA
+    GROUP BY 
+        CUSTOMER_KEY,
+        YEAR
+)
+SELECT
+    RT.CUSTOMER_KEY,
+    RT.YEAR,
+    RT.RECENCY,
+    FT.FREQUENCY,
+    MT.MONETARY
+FROM 
+    RECENCY_TABLE RT
+JOIN    
+    FREQUENCY_TABLE FT
+    ON RT.CUSTOMER_KEY = FT.CUSTOMER_KEY 
+    AND RT.YEAR = FT.YEAR
+JOIN
+    MONETARY_TABLE MT
+    ON RT.CUSTOMER_KEY = MT.CUSTOMER_KEY 
+    AND RT.YEAR = MT.YEAR
+ORDER BY 
+    RT.YEAR DESC, 
+    RT.CUSTOMER_KEY ASC

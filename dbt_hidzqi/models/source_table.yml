@@ -1,0 +1,22 @@
+sources: 
+  - name: ecom
+    schema: my_database  # Perbaikan: 'schemna' → 'schema'
+    tables:
+      - name: cust
+        identifier: customer_dim
+      - name: fact
+        identifier: fact_table
+      - name: time
+        identifier: time_dim
+      - name: item
+        identifier: item_dim
+      - name: store
+        identifier: store_dim
+      - name: trans
+        identifier: trans_dim  # Perbaikan: 'identifierr' → 'identifier'
+    
+  - name: sale
+    schema: my_database  # Perbaikan: 'schemna' → 'schema'
+    tables:
+      - name: sales
+        identifier: sales_data
