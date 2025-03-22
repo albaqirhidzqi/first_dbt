@@ -16,11 +16,12 @@ SELECT
     ProductID,
     OrderQuantity,
     DiscountApplied,
-    CAST(SUBSTRING(UnitCost,2) AS DOUBLE) UnitCost,
-    CAST(SUBSTRING(UnitPrice,2) AS DOUBLE) UnitPrice
+    {% for col in ['UnitCost', 'UnitPrice'] %}
+        CAST(REPLACE(SL.{{ col }}, '$', '') AS DECIMAL(10, 2)) AS {{ col | replace(' ', '_') | lower }}{% if not loop.last %}, {% endif %}
+    {% endfor %}
 FROM 
     {{ source('sale', 'sales') }} SL
-LEFT JOIN {{ ref("sales_team_with_names")}} ST
+LEFT JOIN {{ ref("sales_team_with_names")}} ST  
     ON SL.SalesTeamID = ST.SalesTeamID
 LEFT join {{ ref('warehouse_with_names')}} WH
     ON SL.WarehouseCode = WH.WarehouseCode
